@@ -9,8 +9,8 @@ Functions
 =========
 
 pawnpls   - Automatically enumerate and start predefined attacks such as brute force.
-            Example for single target: autopawn n0nexi-stent.com
-            Example for multiple targets: autopawn "n0nex-1.com n0nex-2.com"
+            Example for single target: autopawn 127.0.0.1
+            Example for multiple targets: autopawn "127.0.0.1 127.0.0.2"
 
 
 everythingworksornot\? - check if everything works or not for this script

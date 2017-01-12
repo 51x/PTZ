@@ -1,0 +1,6 @@
+set linenumbers
+set brackets ""')>]}"
+set matchbrackets "(<[{)>]}"
+set nohelp
+set mouse
+set smooth

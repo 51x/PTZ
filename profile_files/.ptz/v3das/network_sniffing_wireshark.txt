@@ -1,0 +1,37 @@
+C0nn3ctz sniffing wireshark network
+
+IP address
+ip.addr == 192.168.1.1
+ip.src == 192.168.1.1
+ip.dst == 192.168.1.1
+
+Show only tcp port 110
+tcp.port eq 110
+
+Show only tcp and udp port 110
+tcp.port eq 110 || udp.port eq 110
+
+Follow TCP stream
+tcp.stream eq 0
+
+Show only TCP
+tcp
+
+Show only ARP
+arp
+
+Show only HTTP
+http
+
+Show only HTTP or ARP
+http||arp
+
+
+HTTP and ip.src
+http&&ip.src==192.168.1.4
+
+HTTP POST
+http:.request.method == "POST"
+
+etc
+(ip.addr==192.168.1.0/24) and (ip.src!=192.168.1.2)and (ip.dst!=192.168.1.4)
