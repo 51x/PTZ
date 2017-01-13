@@ -11,7 +11,9 @@ Note: this project is a work in progress which we develop with one of my friend 
 
 Works on Debian if the dependencies are met or on Kali. Probably works on Pentoo also.
 
-Installing after you have the dependencies: cp profile_files/.* -R ~/
+Installing full console after you have the dependencies: cp profile_files/.* -R ~/
+
+Using only the pentest function can be done be including: pentest_functions.zsh 
 
 
 Functions
