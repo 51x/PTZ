@@ -13,7 +13,7 @@ Works on Debian if the dependencies are met or on Kali. Probably works on Pentoo
 
 Installing full console after you have the dependencies: cp profile_files/.* -R ~/
 
-Using only the pentest function can be done be including: pentest_functions.zsh 
+Using only the pentest function can be done by including: pentest_functions.zsh 
 
 
 Functions
@@ -52,3 +52,5 @@ help functions
 
 hlp       - Get help of the hlp command
 hlprnd    - Get random strings (lengths: 8,16,32,64)
+hlp <var> - Get help about <var> - not yet implemented
+i         - Get information about a topic, use tab after i
