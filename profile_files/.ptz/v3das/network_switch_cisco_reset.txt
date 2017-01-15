@@ -1,0 +1,7 @@
+
+# reset a cisco switch
+flash_init
+dir flash:
+rename flash:config.text flash:config.backup
+boot
+

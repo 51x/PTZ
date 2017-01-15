@@ -9,22 +9,37 @@ Usability features: tor trigger (ton/tof), external ip check, tor check... and m
 
 Note: this project is a work in progress which we develop with one of my friend in our free time. If you use it, be prepared for some glitches.
 
-Works on Debian if the dependencies are met or on Kali. Probably works on Pentoo also.
-
-Installing full console after you have the dependencies: cp profile_files/.* -R ~/
-
-Using only the pentest function can be done by including: pentest_functions.zsh 
+Works on Debian if the dependencies are met or on Kali. Probably works on Pentoo also. If the dependencies are not met, the functions will still run, but outputs will be empty - at least in the currently status.
 
 
-Functions
-=========
+Install
+=======
 
-pawnpls   - Automatically enumerate and start predefined attacks such as brute force.
+Full console install: git clone https://github.com/51x/PTZ && cd PTZ && cp profile_files/.* -R ~/
+
+Using only the pentest functions can be done by including just: pentest_functions.zsh
+If you want also the notes/knowledge database, you shoul add the v3das folder to you ~/.ptz/ folder.
+
+
+General function of PTZ
+=======================
+
+pawnpls   - Automatically enumerate and start predefined attacks such as brute force. Output goes to ~/.ptz/$target/
             Example for single target: autopawn n0nexi-stent.com
             Example for multiple targets: autopawn "n0nex-1.com n0nex-2.com"
 
 
-everythingworksornot\? - check if everything works or not for this script (tbd)
+ptzdepchk - check if all dependencies are installed or not, print if something is missing
+
+
+Notes functions
+===============
+
+n         - query notes about a topic, use tab auto complete
+
+nls       - list all the notes
+
+rnd       - get random strings (lengths: 8,16,32,64)
 
 
 chk functions
@@ -45,12 +60,3 @@ johnzip   - Crack zip files using john
 
 johnrar   - Crack rar files using john
             Example: johnrar data.rar rockyou.txt
-
-
-help functions
-==============
-
-hlp       - Get help of the hlp command
-hlprnd    - Get random strings (lengths: 8,16,32,64)
-hlp <var> - Get help about <var> - not yet implemented
-i         - Get information about a topic, use tab after i

@@ -1,0 +1,7 @@
+
+tcpdump -r file.cap -vvvs 1024 -l -A host example.com | grep -i cookie
+tcpdump -r file.cap -vvvs 1024 -l -A | egrep -i "host:|cookie:"
+tcpdump -r file.cap -s 1024 -l -A dst domain.com
+
+tcpdump -A # show raw data 
+

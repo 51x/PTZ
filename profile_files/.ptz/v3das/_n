@@ -1,0 +1,3 @@
+#compdef n
+
+_arguments "1: :( $(ls ~/.ptz/v3das/ ) )"

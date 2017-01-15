@@ -1,0 +1,11 @@
+
+# tshark follow stream
+tshark -r <capture file> -R "<filter>" -T fields -e tcp.stream
+tshark -q -r http.pcapng -z follow,tcp,ascii,1
+
+# etc
+tshark grep from http
+tshark -r file.cap 'http'  | egrep -i "login|pass" 
+tshark  'tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)'
+tshark  'tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)'  -R'http.request.method == "GET" || http.request.method == "HEAD"'
+
