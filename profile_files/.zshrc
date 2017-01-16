@@ -10,4 +10,4 @@ source ~/.zsh/history.zsh
 
 zstyle ':completion:*' menu select
 
-. torsocks on
+. torsocks off
