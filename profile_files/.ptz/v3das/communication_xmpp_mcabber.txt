@@ -1,0 +1,42 @@
+# mcabber is a great command line client to use for chat (XMPP) with authentication and encrytpion (OTR).
+
+# The following comments and commands will help you to install and use it.
+
+# Register your account
+# Go to jit.si for example
+
+# Create directory for mcabber config and OTR
+mkdir -p .mcabber/otr
+
+# Copy the sample configuration files
+cp /usr/share/doc/mcabber/examples/mcabberrc.example.gz ~/.
+
+# If the files does not exist, the path may be different.
+# Like "/usr/share/doc/mcabber/mcabberrc.example"
+
+# Unzip the configuration file and rename it
+gunzip mcabberrc.example.gz
+mv mcabberrc.example.gz .mcabberrc
+
+# Correct the priviliges if needed
+chmod 700 .mcabber/ -R
+chmod 700 .mcabberrc
+
+# Edit your configuration with the following settings:
+vim .mcabberrc
+    set jid = testuser@jit.si
+    set otr = 1
+    
+# Start mcabber and login with the account you have registered
+mcabber
+
+# Basic commands 
+/add user@jit.si    # Request someone for chat
+/event 1 accept    # To accept a request
+
+# Using OTR
+# It's recommended to add OTR by default policy to your config files
+/otr key    # Show your fingerprint
+/otr fingerprint . "AAAA AAAA AAAA ...."    # Trust someon's fingerprint
+/otr fingerprint    # Show fingerprints you have
+/otr start    # Start a conversation with OTR

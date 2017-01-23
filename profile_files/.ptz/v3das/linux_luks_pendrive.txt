@@ -1,0 +1,23 @@
+# CryptSetup for pendrive example
+
+# Creation, make sure no CBC is used anymore!
+cryptsetup -c aes -s 256 luksFormat /dev/sdb2
+cryptsetup luksDump /dev/sdb2  # To check it!
+
+cryptsetup luksOpen /dev/sde usb1
+mkfs.vfat /dev/mapper/usb1 -n "usb1"
+
+# Troubleshoot if needed
+dmsetup ls
+dmsetup ls
+
+# Change Passphrse
+cryptsetup -y luksAddKey ENCRYPTED_PARTITION
+cryptsetup luksRemoveKey ENCRYPTED_PARTITION
+
+# Mount and unmount
+cryptsetup luksOpen /dev/sdb2 usb1
+mount /dev/mapper/usb1 /mnt
+umount /mnt/point
+
+

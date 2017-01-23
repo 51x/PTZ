@@ -1,0 +1,64 @@
+# How to create ZFS mirroring on Debian 7 / Old notes!
+
+# Information were gathered from the following sites:
+# http://zfsonlinux.org/debian.html
+# http://www.zfsbuild.com/2010/06/03/howto-create-mirrored-vdev-zpool/
+# http://allgood38.io/setting-up-a-basic-linux-zfs-instance.html
+# https://help.ubuntu.com/community/encryptedZfs
+# http://linux.arantius.com/installing-gentoo-into-a-luks-encrypted-zfs-root
+#
+# CheatSheet: http://lildude.co.uk/zfs-cheatsheet
+
+# Get ZFS On Linux debian package, install it and add their GPG key to APT
+su
+wget http://archive.zfsonlinux.org/debian/pool/main/z/zfsonlinux/zfsonlinux_8_all.deb
+dpkg -i zfsonlinux_8_all.deb
+wget http://zfsonlinux.org/4D5843EA.asc -O - | apt-key add -
+
+# Install ZFS using APT
+apt-get update
+apt-get install debian-zfs
+
+# Create LUKS encrypted volumes
+cryptsetup luksFormat /dev/sdc
+cryptsetup luksFormat /dev/sdd
+
+# Open luks encrypted devices - those will be mirrored
+cryptsetup luksOpen  /dev/sdc luk1
+cryptsetup luksOpen  /dev/sdd luk2
+
+# Create the mirror pool using the opened luks devices
+# WARNING
+# THIS DESTROYES YOUR EXISTING POOL IF YOU ALREADY HAVE ONE!
+zpool create -m none -O compression=lz4 m_pool mirror luk1 luk2
+# -m mountpoint -O
+# END OF CREATION
+# Done!
+
+# The following part is required for mounting/opening our ZFS mirror.
+
+# Import the pool if it's not already
+zpool import m_pool
+
+# Mount it manually
+zfs set mountpoint=/mpool m_pool
+
+# Checks
+zpool list
+zpool iostat
+zpool status
+
+
+--------
+
+# Finally change privileges if needed
+chown -R storager:storager /mpool
+
+# Create ZFS filesystem
+zfs create tank/testfs
+
+
+--------
+
+# Destory
+zpool destroy m_pool

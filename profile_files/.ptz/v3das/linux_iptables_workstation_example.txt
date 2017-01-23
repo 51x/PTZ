@@ -1,0 +1,21 @@
+#!/bin/bash
+# Example iptables for workstation
+
+IPT=/sbin/iptables
+$IPT -F
+
+#Policies
+$IPT -P OUTPUT ACCEPT
+$IPT -P INPUT DROP
+$IPT -P FORWARD DROP
+
+#Allow IN for services
+$IPT -A INPUT --in-interface lo -j ACCEPT
+
+#Allow response
+$IPT -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# Block ipv6, sorry lazy to set path, its a note :)
+ip6tables -P INPUT DROP 2>/dev/null
+ip6tables -P FORWARD DROP 2>/dev/null
+ip6tables -P OUTPUT DROP 2>/dev/null
