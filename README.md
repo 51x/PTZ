@@ -15,7 +15,7 @@ Works on Debian if the dependencies are met or on Kali. Probably works on Pentoo
 Install
 =======
 
-Full console install: git clone https://github.com/51x/PTZ && cd PTZ && cp profile_files/.* -R ~/
+Full console install: cd /tmp/ && git clone https://github.com/51x/PTZ && cd PTZ && cp profile_files/.* -R ~/
 
 Using only the pentest functions can be done by including just: pentest_functions.zsh
 If you want also the notes/knowledge database, you shoul add the v3das folder to you ~/.ptz/ folder.
@@ -40,6 +40,8 @@ n         - query notes about a topic, use tab auto complete
 nls       - list all the notes
 
 rnd       - get random strings (lengths: 8,16,32,64)
+
+tmp       - open vim with a random file name to be written under /tmp/
 
 
 chk functions
