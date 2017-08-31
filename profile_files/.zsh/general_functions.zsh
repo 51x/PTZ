@@ -20,3 +20,11 @@ function extract {
       echo "'$1' is not a valid file"
   fi
 }
+
+function wttrb {
+    curl wttr.in/budapest
+}
+
+#function wttrk {
+#    curl wttr.in/~Kilimanjaro
+#}
