@@ -1,24 +1,20 @@
 Penetration Tester's Zsh
 ========================
 
-Goal: make penetration testing faster, more convinient, transparent and efficient.
-
-Features planned: preconfigured functions (including tools), note knowledge base with practical examples, automated "dumb" pentesting.
+Goal: make the life of a hacker / penetration tester faster, more convinient, transparent and efficient.
 
 Usability features: tor trigger (ton/tof), external ip check, tor check... and more to be added.
 
-Note: this project is a work in progress which we develop with one of my friend in our free time. If you use it, be prepared for some glitches.
-
-Works on Debian if the dependencies are met or on Kali. Probably works on Pentoo also. If the dependencies are not met, the functions will still run, but outputs will be empty - at least in the currently status.
+Works on Debian if the dependencies are met or on Kali "out of box". If the dependencies are not met, the functions will still run, but outputs will be empty or you get an alert.
 
 
 Install
 =======
 
-Full console install: cd /tmp/ && git clone https://github.com/51x/PTZ && cd PTZ && cp profile_files/.* -R ~/
+cd /tmp/ && git clone https://github.com/51x/PTZ && cd PTZ && cp profile_files/.* -R ~/ && cd
 
 Using only the pentest functions can be done by including just: pentest_functions.zsh
-If you want also the notes/knowledge database, you shoul add the v3das folder to you ~/.ptz/ folder.
+If you want also the notes/knowledge database, you should add the v3das folder to you ~/.ptz/ folder.
 
 
 General function of PTZ
