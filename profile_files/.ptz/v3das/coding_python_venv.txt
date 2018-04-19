@@ -1,0 +1,6 @@
+tl;dr the use of virtual env:
+
+# #! /usr/bin/env python
+# . venv/bin/activate
+
+

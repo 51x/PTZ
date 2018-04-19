@@ -1,0 +1,16 @@
+#!/bin/bash
+# Desktop example -> just like in the LWHP repo
+
+IPT=/sbin/iptables
+$IPT -F
+
+#Policies
+$IPT -P OUTPUT ACCEPT
+$IPT -P INPUT DROP
+$IPT -P FORWARD DROP
+
+#Allow IN for services
+$IPT -A INPUT --in-interface lo -j ACCEPT
+
+#Allow response
+$IPT -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
